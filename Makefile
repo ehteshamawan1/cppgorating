@@ -3,5 +3,5 @@
 CC=gcc
 CFLAGS= -std=c++20 -pedantic -Wall -Wextra -g
 
-make: src/main.cpp
+make:
   cc src/main.cpp -o gorating
