@@ -4,4 +4,4 @@ CC=gcc
 CFLAGS= -std=c++20 -pedantic -Wall -Wextra -g
 
 make:
-	cc src/main.cpp -o gorating
+	cc -I/src -I/lib/crow -I/lib/mysql/include/jdbc src/main.cpp -o gorating
