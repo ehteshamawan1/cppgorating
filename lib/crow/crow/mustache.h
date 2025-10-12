@@ -177,21 +177,17 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 static json::wvalue empty_str;
                 empty_str = "";
 
-                int dotPosition = name.find(".");
+                std::string::size_type dotPosition = name.find(".");
                 if (dotPosition == static_cast<int>(name.npos))
                 {
                     for (auto it = stack.rbegin(); it != stack.rend(); ++it)
-                    {
                         if ((*it)->t() == json::type::Object)
-                        {
                             if ((*it)->count(name))
                                 return {true, (**it)[name]};
-                        }
-                    }
                 }
                 else
                 {
-                    std::vector<int> dotPositions;
+                    std::vector<std::string::size_type> dotPositions;
                     dotPositions.push_back(-1);
                     while (dotPosition != static_cast<int>(name.npos))
                     {
@@ -299,7 +295,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                             std::string partial_name = tag_name(action);
                             auto partial_templ = load(partial_name);
                             int partial_indent = action.pos;
-                            partial_templ.render_internal(0, partial_templ.fragments_.size() - 1, stack, out, partial_indent ? indent + partial_indent : 0);
+                            partial_templ.render_internal(0, int(partial_templ.fragments_.size()) - 1, stack, out, partial_indent ? indent + partial_indent : 0);
                         }
                         break;
                         case ActionType::UnescapeTag:
@@ -447,7 +443,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 stack.emplace_back(&empty_ctx);
 
                 std::string ret;
-                render_internal(0, fragments_.size() - 1, stack, ret, 0);
+                render_internal(0, int(fragments_.size()) - 1, stack, ret, 0);
                 return rendered_template(ret);
             }
 
@@ -458,7 +454,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 stack.emplace_back(&ctx);
 
                 std::string ret;
-                render_internal(0, fragments_.size() - 1, stack, ret, 0);
+                render_internal(0, int(fragments_.size()) - 1, stack, ret, 0);
                 return rendered_template(ret);
             }
 
@@ -476,7 +472,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 stack.emplace_back(&empty_ctx);
 
                 std::string ret;
-                render_internal(0, fragments_.size() - 1, stack, ret, 0);
+                render_internal(0, int(fragments_.size()) - 1, stack, ret, 0);
                 return ret;
             }
 
@@ -487,7 +483,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 stack.emplace_back(&ctx);
 
                 std::string ret;
-                render_internal(0, fragments_.size() - 1, stack, ret, 0);
+                render_internal(0, int(fragments_.size()) - 1, stack, ret, 0);
                 return ret;
             }
 

@@ -1264,7 +1264,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
             s[size] = 0;
             auto ret = load_nocopy_internal(s, size);
             if (ret)
-                ret.key_.force(s, size);
+                ret.key_.force(s, uint32_t(size));
             else
                 delete[] s;
             return ret;
@@ -1746,7 +1746,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                     return 0;
                 if (!o)
                     return 0;
-                return o->count(str);
+                return int(o->count(str));
             }
 
             wvalue& operator[](const std::string& str)

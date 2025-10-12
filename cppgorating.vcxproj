@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;lib/crow;lib/mysql/include/jdbc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;lib/crow;lib/asio/include;lib/mysql/include/jdbc</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -136,10 +136,44 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\AccessPoint.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lib\crow\crow.h" />
+    <ClInclude Include="lib\crow\crow\app.h" />
+    <ClInclude Include="lib\crow\crow\ci_map.h" />
+    <ClInclude Include="lib\crow\crow\common.h" />
+    <ClInclude Include="lib\crow\crow\compression.h" />
+    <ClInclude Include="lib\crow\crow\exceptions.h" />
+    <ClInclude Include="lib\crow\crow\http_connection.h" />
+    <ClInclude Include="lib\crow\crow\http_parser_merged.h" />
+    <ClInclude Include="lib\crow\crow\http_request.h" />
+    <ClInclude Include="lib\crow\crow\http_response.h" />
+    <ClInclude Include="lib\crow\crow\http_server.h" />
+    <ClInclude Include="lib\crow\crow\json.h" />
+    <ClInclude Include="lib\crow\crow\logging.h" />
+    <ClInclude Include="lib\crow\crow\middleware.h" />
+    <ClInclude Include="lib\crow\crow\middlewares\cookie_parser.h" />
+    <ClInclude Include="lib\crow\crow\middlewares\cors.h" />
+    <ClInclude Include="lib\crow\crow\middlewares\session.h" />
+    <ClInclude Include="lib\crow\crow\middlewares\utf-8.h" />
+    <ClInclude Include="lib\crow\crow\middleware_context.h" />
+    <ClInclude Include="lib\crow\crow\mime_types.h" />
+    <ClInclude Include="lib\crow\crow\multipart.h" />
+    <ClInclude Include="lib\crow\crow\multipart_view.h" />
+    <ClInclude Include="lib\crow\crow\mustache.h" />
+    <ClInclude Include="lib\crow\crow\parser.h" />
+    <ClInclude Include="lib\crow\crow\query_string.h" />
+    <ClInclude Include="lib\crow\crow\returnable.h" />
+    <ClInclude Include="lib\crow\crow\routing.h" />
+    <ClInclude Include="lib\crow\crow\settings.h" />
+    <ClInclude Include="lib\crow\crow\socket_acceptors.h" />
+    <ClInclude Include="lib\crow\crow\socket_adaptors.h" />
+    <ClInclude Include="lib\crow\crow\task_timer.h" />
+    <ClInclude Include="lib\crow\crow\TinySHA1.hpp" />
+    <ClInclude Include="lib\crow\crow\utility.h" />
+    <ClInclude Include="lib\crow\crow\version.h" />
+    <ClInclude Include="lib\crow\crow\websocket.h" />
     <ClInclude Include="src\AccessPoint.hpp" />
     <ClInclude Include="src\config.hpp" />
   </ItemGroup>

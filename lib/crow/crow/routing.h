@@ -841,7 +841,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
         }
 
         //Rule_index, Blueprint_index, routing_params
-        routing_handle_result find(const std::string& req_url, const Node& node, unsigned pos = 0, routing_params* params = nullptr, std::vector<uint16_t>* blueprints = nullptr) const
+        routing_handle_result find(const std::string& req_url, const Node& node, std::string::size_type pos = 0, routing_params* params = nullptr, std::vector<uint16_t>* blueprints = nullptr) const
         {
             //start params as an empty struct
             routing_params empty;
@@ -891,7 +891,11 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                                 found_fragment = true;
                                 params->int_params.push_back(value);
                                 if (child.blueprint_index != INVALID_BP_ID) blueprints->push_back(child.blueprint_index);
-                                auto ret = find(req_url, child, eptr - req_url.data(), params, blueprints);
+                                auto ret = find(req_url,
+                                                child,
+                                                eptr - req_url.data(),
+                                                params,
+                                                blueprints);
                                 update_found(ret);
                                 params->int_params.pop_back();
                                 if (!blueprints->empty()) blueprints->pop_back();
@@ -1005,13 +1009,13 @@ namespace crow // NOTE: Already documented in "crow/app.h"
         }
 
         //This functions assumes any blueprint info passed is valid
-        void add(const std::string& url, uint16_t rule_index, unsigned bp_prefix_length = 0, uint16_t blueprint_index = INVALID_BP_ID)
+        void add(const std::string& url, uint16_t rule_index, std::string::size_type bp_prefix_length = 0, uint16_t blueprint_index = INVALID_BP_ID)
         {
             auto idx = &head_;
 
             bool has_blueprint = bp_prefix_length != 0 && blueprint_index != INVALID_BP_ID;
 
-            for (unsigned i = 0; i < url.size(); i++)
+            for (std::string::size_type i = 0; i < url.size(); i++)
             {
                 char c = url[i];
                 if (c == '<')
@@ -1306,7 +1310,10 @@ namespace crow // NOTE: Already documented in "crow/app.h"
 
             ruleObject->foreach_method([&](int method) {
                 per_methods_[method].rules.emplace_back(ruleObject);
-                per_methods_[method].trie.add(rule, per_methods_[method].rules.size() - 1, BP_index != INVALID_BP_ID ? blueprints[BP_index]->prefix().length() : 0, BP_index);
+                per_methods_[method].trie.add(rule,
+                                              uint16_t(per_methods_[method].rules.size()) - 1,
+                                              BP_index != INVALID_BP_ID ? uint16_t(blueprints[BP_index]->prefix().length()) : 0,
+                                              BP_index);
 
                 // directory case:
                 //   request to '/about' url matches '/about/' rule
@@ -1518,7 +1525,7 @@ namespace crow // NOTE: Already documented in "crow/app.h"
             res.code = code;
             std::vector<Blueprint*> bps_found;
             get_found_bp(found.blueprint_indices, blueprints_, bps_found);
-            for (int i = bps_found.size() - 1; i > 0; i--)
+            for (size_t i = bps_found.size() - 1; i > 0; i--)
             {
                 std::vector<uint16_t> bpi = found.blueprint_indices;
                 if (bps_found[i]->catchall_rule().has_handler())

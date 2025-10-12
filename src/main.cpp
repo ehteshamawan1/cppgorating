@@ -1,3 +1,4 @@
+#define _WIN32_WINNT 0x0601
 #include <crow.h>
 #define STATIC_CONCPP
 #include "config.hpp"
