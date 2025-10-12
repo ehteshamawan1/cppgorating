@@ -1,6 +1,6 @@
 #include <crow.h>
 #define STATIC_CONCPP
-#include <config.hpp>
+#include "config.hpp"
 
 #include "mysql_connection.h"
 #include <cppconn/driver.h>
