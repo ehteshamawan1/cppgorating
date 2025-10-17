@@ -1,0 +1,47 @@
+========================================
+cppgorating - Third-Party Setup
+========================================
+
+IMPORTANT: Before building, you must add the required dependencies!
+
+STEP 1: Navigate to third_party directory
+cd third_party
+
+STEP 2: Clone required repositories
+
+# Drogon web framework (REQUIRED)
+git clone --depth 1 https://github.com/drogonframework/drogon.git
+
+# Trantor network library (REQUIRED - needed by Drogon)
+git clone --depth 1 https://github.com/an-tao/trantor.git
+
+# jsoncpp (REQUIRED - needed by Drogon)
+git clone --depth 1 https://github.com/open-source-parsers/jsoncpp.git
+
+# libcurl (REQUIRED for /fetch endpoint)
+git clone --depth 1 https://github.com/curl/curl.git libcurl
+
+# Unittest++ (REQUIRED for testing)
+git clone --depth 1 https://github.com/unittest-cpp/unittest-cpp.git
+
+# Gumbo HTML parser (REQUIRED for HTML parsing)
+git clone --depth 1 https://github.com/google/gumbo-parser.git
+
+STEP 3: OpenSSL Setup
+
+Windows (vcpkg):
+  vcpkg install openssl:x64-windows-static
+
+Linux/FreeBSD:
+  sudo apt-get install libssl-dev  (Ubuntu/Debian)
+  sudo pkg install openssl         (FreeBSD)
+
+STEP 4: Return to project root and build
+cd ..
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
+
+========================================
+For detailed instructions, see third_party/README.md
+========================================
