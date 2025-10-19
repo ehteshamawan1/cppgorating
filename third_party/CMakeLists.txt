@@ -1,7 +1,18 @@
 # Third-party dependencies for cppgorating
 # All dependencies are configured for static linking
 
+message(STATUS "=======================================================")
 message(STATUS "Configuring third-party dependencies...")
+message(STATUS "")
+message(STATUS "NOTE: If you get errors about missing dependencies,")
+message(STATUS "please follow the setup instructions in:")
+message(STATUS "  - third_party/README.md")
+message(STATUS "  - third_party/SETUP_INSTRUCTIONS.txt")
+message(STATUS "")
+message(STATUS "Quick setup: Clone required dependencies into third_party/")
+message(STATUS "See README.md section 'Quick Start - Step 2' for details.")
+message(STATUS "=======================================================")
+message(STATUS "")
 
 # Force static library builds
 include(${CMAKE_SOURCE_DIR}/cmake/StaticBuild.cmake)
@@ -30,7 +41,11 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/jsoncpp/CMakeLists.txt)
     set(BUILD_STATIC_LIBS ON CACHE BOOL "" FORCE)
     add_subdirectory(jsoncpp EXCLUDE_FROM_ALL)
 else()
-    message(WARNING "jsoncpp not found in third_party/jsoncpp - clone it first!")
+    message(FATAL_ERROR "jsoncpp not found in third_party/jsoncpp!\n"
+            "This is a REQUIRED dependency. Please clone it:\n"
+            "  cd third_party\n"
+            "  git clone --depth 1 https://github.com/open-source-parsers/jsoncpp.git\n"
+            "See third_party/README.md for complete setup instructions.")
 endif()
 
 #=============================================================================
@@ -41,7 +56,11 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/trantor/CMakeLists.txt)
     set(BUILD_TRANTOR_SHARED OFF CACHE BOOL "" FORCE)
     add_subdirectory(trantor EXCLUDE_FROM_ALL)
 else()
-    message(WARNING "Trantor not found in third_party/trantor - clone it first!")
+    message(FATAL_ERROR "Trantor not found in third_party/trantor!\n"
+            "This is a REQUIRED dependency. Please clone it:\n"
+            "  cd third_party\n"
+            "  git clone --depth 1 https://github.com/an-tao/trantor.git\n"
+            "See third_party/README.md for complete setup instructions.")
 endif()
 
 #=============================================================================
@@ -62,7 +81,11 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/drogon/CMakeLists.txt)
     add_subdirectory(drogon EXCLUDE_FROM_ALL)
     message(STATUS "  Drogon configured for static linking")
 else()
-    message(WARNING "Drogon not found in third_party/drogon - clone it first!")
+    message(FATAL_ERROR "Drogon not found in third_party/drogon!\n"
+            "This is a REQUIRED dependency. Please clone it:\n"
+            "  cd third_party\n"
+            "  git clone --depth 1 https://github.com/drogonframework/drogon.git\n"
+            "See third_party/README.md for complete setup instructions.")
 endif()
 
 #=============================================================================
@@ -82,7 +105,11 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/libcurl/CMakeLists.txt)
     add_subdirectory(libcurl EXCLUDE_FROM_ALL)
     message(STATUS "  libcurl configured for static linking")
 else()
-    message(WARNING "libcurl not found in third_party/libcurl - clone it first!")
+    message(FATAL_ERROR "libcurl not found in third_party/libcurl!\n"
+            "This is a REQUIRED dependency. Please clone it:\n"
+            "  cd third_party\n"
+            "  git clone --depth 1 https://github.com/curl/curl.git libcurl\n"
+            "See third_party/README.md for complete setup instructions.")
 endif()
 
 #=============================================================================
