@@ -1,4 +1,4 @@
-#include <UnitTest++/UnitTest++.h>
+#include <gtest/gtest.h>
 #include <string>
 #include <memory>
 
@@ -10,82 +10,81 @@
  * For integration testing, start the server and use HTTP client to test.
  */
 
-SUITE(HttpTests)
+// Test main route handler logic
+TEST(HttpTests, MainRouteHandler)
 {
-    // Test main route handler logic
-    TEST(MainRouteHandler)
-    {
-        // This tests the logic of the main route (GET /)
-        // In a full integration test, you would:
-        // 1. Start the server
-        // 2. Make HTTP request to http://localhost:18080/
-        // 3. Verify response contains "countries"
-        // 4. Verify response is 200 OK
+    // This tests the logic of the main route (GET /)
+    // In a full integration test, you would:
+    // 1. Start the server
+    // 2. Make HTTP request to http://localhost:18080/
+    // 3. Verify response contains "countries"
+    // 4. Verify response is 200 OK
 
-        // For now, this is a placeholder demonstrating test structure
-        std::string expectedSubstring = "countries";
-        CHECK(expectedSubstring.length() > 0);
-    }
+    // For now, this is a placeholder demonstrating test structure
+    std::string expectedSubstring = "countries";
+    EXPECT_GT(expectedSubstring.length(), 0u) << "Expected substring should not be empty";
+}
 
-    // Test fetch endpoint handler logic
-    TEST(FetchEndpointHandler)
-    {
-        // This tests the logic of the /fetch endpoint
-        // In a full integration test, you would:
-        // 1. Start the server
-        // 2. Make request to http://localhost:18080/fetch?url=https://example.com
-        // 3. Verify response contains HTML content
-        // 4. Verify response is JSON format
-        // 5. Verify response has 'url', 'status_code', 'html' fields
+// Test fetch endpoint handler logic
+TEST(HttpTests, FetchEndpointHandler)
+{
+    // This tests the logic of the /fetch endpoint
+    // In a full integration test, you would:
+    // 1. Start the server
+    // 2. Make request to http://localhost:18080/fetch?url=https://example.com
+    // 3. Verify response contains HTML content
+    // 4. Verify response is JSON format
+    // 5. Verify response has 'url', 'status_code', 'html' fields
 
-        // Placeholder test
-        CHECK(true);
-    }
+    // Placeholder test
+    SUCCEED() << "Fetch endpoint test placeholder";
+}
 
-    // Test fetch endpoint with parsing
-    TEST(FetchEndpointWithParsing)
-    {
-        // This tests the HTML parsing feature of /fetch endpoint
-        // In a full integration test, you would:
-        // 1. Make request to http://localhost:18080/fetch?url=...&parse=true
-        // 2. Verify response contains 'parsed' object
-        // 3. Verify parsed object has 'title', 'links', 'headings' fields
+// Test fetch endpoint with parsing
+TEST(HttpTests, FetchEndpointWithParsing)
+{
+    // This tests the HTML parsing feature of /fetch endpoint
+    // In a full integration test, you would:
+    // 1. Make request to http://localhost:18080/fetch?url=...&parse=true
+    // 2. Verify response contains parsed data
+    // 3. Verify parsed.title, parsed.meta_description, parsed.links are present
+    // 4. Verify parsing was successful
 
-        // Placeholder test
-        CHECK(true);
-    }
+    // Placeholder test
+    SUCCEED() << "Fetch with parsing test placeholder";
+}
 
-    // Test error handling for missing parameters
-    TEST(ErrorHandlingMissingUrl)
-    {
-        // Test that /fetch without url parameter returns 400 Bad Request
-        // This would require HTTP client or mock testing
+// Test error handling for invalid endpoints
+TEST(HttpTests, InvalidEndpoint)
+{
+    // This tests the error handling for non-existent endpoints
+    // In a full integration test, you would:
+    // 1. Make request to http://localhost:18080/nonexistent
+    // 2. Verify response is 404 Not Found
+    // 3. Verify error message is appropriate
 
-        // Placeholder test
-        CHECK(true);
-    }
+    // Placeholder test
+    SUCCEED() << "Invalid endpoint test placeholder";
+}
 
-    // Test CORS headers (if applicable)
-    TEST(CorsHeaders)
-    {
-        // Verify appropriate CORS headers are set if needed
-        // This depends on Drogon configuration
+// Test JSON response format
+TEST(HttpTests, JsonResponseFormat)
+{
+    // This tests that responses are in valid JSON format
+    // In a full integration test, you would:
+    // 1. Make request to any endpoint
+    // 2. Parse JSON response
+    // 3. Verify valid JSON structure
+    // 4. Verify required fields are present
 
-        // Placeholder test
-        CHECK(true);
-    }
+    // Placeholder test
+    std::string sampleJson = R"({"countries": 42})";
+    EXPECT_GT(sampleJson.length(), 0u) << "Sample JSON should not be empty";
 }
 
 // Note about running these tests:
-// These are integration tests that require:
-// 1. A running instance of cppgorating server
-// 2. An HTTP client library (e.g., libcurl, httplib, etc.)
-//
-// For actual integration testing:
-// 1. Start server in test mode: ./cppgorating
-// 2. Run tests: ./cppgorating_tests -suite HttpTests
-//
-// Consider using a testing framework like:
-// - cpp-httplib for HTTP client testing
-// - Google Mock for mocking HTTP requests
-// - Drogon's built-in testing capabilities
+// To run these tests as integration tests:
+// 1. Start the cppgorating server: ./bin/cppgorating
+// 2. Use a HTTP testing library (like cpp-httplib) to make requests
+// 3. Verify responses
+// 4. Run: ./cppgorating_tests --gtest_filter=HttpTests.*

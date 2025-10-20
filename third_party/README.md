@@ -1,177 +1,140 @@
 # Third-Party Dependencies
 
-This directory contains all external dependencies for the cppgorating project.
+## ⚠️ IMPORTANT: Dependencies are now managed by vcpkg!
 
-## Currently Included
+As of version 2.0, this project uses **vcpkg** for dependency management. You no longer need to manually clone dependencies into this directory.
 
-- **asio/** - ASIO 1.36.0 (Async I/O library) ✓
-- **mysql/** - MySQL Connector/C++ (Database connectivity) ✓
-- **crow_backup/** - Crow framework (backup, kept for reference)
+## What is vcpkg?
 
-## Dependencies to Add
+vcpkg is Microsoft's official C++ package manager that handles all dependencies automatically, including:
+- Downloading source code
+- Building libraries
+- Linking
+- Handling transitive dependencies (dependencies of dependencies)
 
-The following dependencies need to be cloned to complete the setup:
+## Dependencies Managed by vcpkg
 
-### Core Dependencies (Required)
+The following dependencies are automatically installed and managed by vcpkg (see `vcpkg.json` in the root directory):
 
-1. **Drogon** - Web framework (replaces Crow)
-   ```bash
-   cd third_party
-   git clone --depth 1 https://github.com/drogonframework/drogon.git
-   ```
+- **Drogon** - Web framework (includes Trantor, jsoncpp, c-ares automatically)
+- **CURL** - HTTP client library
+- **Gumbo** - HTML parser
+- **Google Test** - Testing framework
+- **MySQL Connector C++** - Database connector (optional, can use custom version below)
 
-2. **Trantor** - Network library (required by Drogon)
-   ```bash
-   cd third_party
-   git clone --depth 1 https://github.com/an-tao/trantor.git
-   ```
+## Legacy Dependencies (Kept in this directory)
 
-3. **jsoncpp** - JSON parsing library
-   ```bash
-   cd third_party
-   git clone --depth 1 https://github.com/open-source-parsers/jsoncpp.git
-   ```
+### ASIO (Header-Only)
+- Location: `third_party/asio/`
+- Status: ✅ **Kept** (header-only library, no building required)
+- Purpose: Async I/O operations
+- No action needed
 
-4. **OpenSSL** - SSL/TLS support
-   - **Windows:** Use vcpkg or download pre-built binaries from https://slproweb.com/products/Win32OpenSSL.html
-   - **Linux:** Install via package manager or build from source
-     ```bash
-     # Ubuntu/Debian
-     sudo apt-get install libssl-dev
-
-     # Or build from source
-     cd third_party
-     git clone --depth 1 https://github.com/openssl/openssl.git
-     cd openssl
-     ./config --prefix=$PWD/install
-     make && make install
-     ```
-
-### Additional Features (Required)
-
-5. **libcurl** - HTTP client library
-   ```bash
-   cd third_party
-   git clone --depth 1 https://github.com/curl/curl.git libcurl
-   ```
-
-6. **Unittest++** - Unit testing framework
-   ```bash
-   cd third_party
-   git clone --depth 1 https://github.com/unittest-cpp/unittest-cpp.git
-   ```
-
-7. **Gumbo Parser** - HTML parsing library
-   ```bash
-   cd third_party
-   git clone --depth 1 https://github.com/google/gumbo-parser.git
-   ```
+### MySQL Connector/C++ (Optional Custom Version)
+- Location: `third_party/mysql/`
+- Status: ⚠️ **Optional** - You can use either:
+  1. vcpkg version (recommended): Automatically installed
+  2. Custom version: Place libraries in `third_party/mysql/lib64/`
+- Purpose: MySQL database connectivity
 
 ## Setup Instructions
 
-### Quick Setup (All Dependencies)
+### Option 1: Using vcpkg (Recommended)
 
-Run these commands from the project root:
+1. **Install vcpkg** (if not already installed):
+   ```batch
+   REM Windows
+   git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
+   cd C:\vcpkg
+   bootstrap-vcpkg.bat
 
-```bash
-cd third_party
+   REM Set environment variable
+   setx VCPKG_ROOT "C:\vcpkg"
+   ```
 
-# Core dependencies
-git clone --depth 1 https://github.com/drogonframework/drogon.git
-git clone --depth 1 https://github.com/an-tao/trantor.git
-git clone --depth 1 https://github.com/open-source-parsers/jsoncpp.git
+2. **Configure the project** (vcpkg will automatically install dependencies):
+   ```batch
+   REM Windows (Visual Studio)
+   cmake --preset windows-release
 
-# Additional features
-git clone --depth 1 https://github.com/curl/curl.git libcurl
-git clone --depth 1 https://github.com/unittest-cpp/unittest-cpp.git
-git clone --depth 1 https://github.com/google/gumbo-parser.git
+   REM Or manually specify vcpkg
+   cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static
+   ```
 
-cd ..
-```
+3. **Build**:
+   ```batch
+   cmake --build build --config Release
+   ```
 
-### OpenSSL Setup
+That's it! vcpkg handles everything else automatically.
 
-**Option 1: System OpenSSL (Recommended for Linux/FreeBSD)**
-```bash
-# Ubuntu/Debian
-sudo apt-get install libssl-dev
+### Option 2: Manual Setup (Not Recommended)
 
-# FreeBSD
-sudo pkg install openssl
+If you cannot use vcpkg for some reason, you would need to manually install all dependencies. This is **NOT recommended** due to:
+- Complex dependency chains (Drogon needs Trantor, jsoncpp, c-ares, zlib, brotli, OpenSSL...)
+- Platform-specific build issues
+- Version compatibility problems
+- Much longer setup time
 
-# Fedora/RHEL
-sudo dnf install openssl-devel
-```
+## What Happened to the Old Dependencies?
 
-**Option 2: vcpkg (Recommended for Windows)**
-```bash
-vcpkg install openssl:x64-windows-static
-```
+The following directories are **no longer needed** and can be removed:
+- `third_party/drogon/`
+- `third_party/trantor/`
+- `third_party/jsoncpp/`
+- `third_party/libcurl/`
+- `third_party/gumbo-parser/`
+- `third_party/unittest-cpp/`
+- `third_party/crow_backup/`
 
-**Option 3: Build from source**
-```bash
-cd third_party
-git clone --depth 1 https://github.com/openssl/openssl.git
-cd openssl
-./config no-shared --prefix=$PWD/install
-make -j$(nproc)
-make install
-```
-
-## Directory Structure After Setup
-
-```
-third_party/
-├── asio/              # ASIO (already included)
-├── mysql/             # MySQL Connector (already included)
-├── crow_backup/       # Crow backup (kept for reference)
-│   └── old_build_system/  # Old Makefile and VS files
-├── drogon/            # Drogon framework (clone required)
-├── trantor/           # Trantor network library (clone required)
-├── jsoncpp/           # JSON parsing (clone required)
-├── openssl/           # OpenSSL (optional, or use system)
-├── libcurl/           # libcurl HTTP client (clone required)
-├── unittest-cpp/      # Unittest++ testing (clone required)
-├── gumbo-parser/      # Gumbo HTML parser (clone required)
-├── CMakeLists.txt     # CMake configuration
-├── README.md          # This file
-└── SETUP_INSTRUCTIONS.txt  # Quick setup reference
-```
-
-## Notes
-
-- All dependencies are configured for **static linking**
-- Clone with `--depth 1` to save disk space
-- For production, consider using specific version tags instead of master/main
-- Some dependencies may require additional system libraries (pthread, dl, etc.)
-
-## Build Configuration
-
-All dependencies are configured in `third_party/CMakeLists.txt` with static linking options:
-- `BUILD_SHARED_LIBS=OFF`
-- `BUILD_STATIC_LIBS=ON`
-- Platform-specific flags for Windows/Linux/FreeBSD
+vcpkg manages all of these automatically now.
 
 ## Troubleshooting
 
-### Issue: Git clone fails
-**Solution:** Check internet connection, or download zip files manually from GitHub
+### "vcpkg not found"
+- Make sure `VCPKG_ROOT` environment variable is set
+- Or use CMakePresets.json (already configured)
 
-### Issue: OpenSSL not found
-**Solution:** Install system OpenSSL or specify path with `-DOPENSSL_ROOT_DIR=/path/to/openssl`
+### "Dependencies not installing"
+- Check `vcpkg.json` in project root
+- Run `vcpkg install` manually in vcpkg directory
+- Ensure internet connection is available
 
-### Issue: MySQL Connector missing
-**Solution:** Ensure MySQL Connector/C++ libraries are in `third_party/mysql/lib64/`
+### "Build fails with missing libraries"
+- Ensure you're using the correct CMake preset: `--preset windows-release`
+- Check that vcpkg toolchain is being used
+- Verify `VCPKG_TARGET_TRIPLET` is set to `x64-windows-static`
 
-## License Information
+## For Developers
 
-Each dependency has its own license. Please review:
-- Drogon: MIT License
-- Trantor: BSD 3-Clause License
-- jsoncpp: MIT License or Public Domain
-- OpenSSL: Apache License 2.0
-- libcurl: MIT/X derivate license
-- Unittest++: MIT License
-- Gumbo: Apache License 2.0
-- ASIO: Boost Software License
-- MySQL Connector/C++: GPL v2 with FLOSS exception
+If you need to add a new dependency:
+
+1. Search for it in vcpkg:
+   ```batch
+   vcpkg search <package-name>
+   ```
+
+2. Add it to `vcpkg.json` in the project root:
+   ```json
+   {
+     "dependencies": [
+       "existing-package",
+       "new-package"
+     ]
+   }
+   ```
+
+3. Add `find_package()` in CMakeLists.txt:
+   ```cmake
+   find_package(NewPackage CONFIG REQUIRED)
+   target_link_libraries(cppgorating PRIVATE NewPackage::NewPackage)
+   ```
+
+4. Reconfigure CMake - vcpkg will automatically install the new dependency
+
+## More Information
+
+- vcpkg Documentation: https://vcpkg.io/
+- vcpkg GitHub: https://github.com/microsoft/vcpkg
+- Project vcpkg.json: See root directory
+- CMakePresets.json: Configured for automatic vcpkg integration

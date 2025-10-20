@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "cppgorating",
+  "version": "1.0.0",
+  "description": "Cross-platform C++ rating system with web API",
+  "homepage": "https://github.com/ehteshamawan1/cppgorating",
+  "dependencies": [
+    {
+      "name": "drogon",
+      "features": ["ctl"]
+    },
+    {
+      "name": "curl",
+      "default-features": false,
+      "features": ["ssl", "http2"]
+    },
+    "mysql-connector-cpp",
+    "gumbo",
+    "gtest"
+  ]
+}
